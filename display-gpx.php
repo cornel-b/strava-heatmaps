@@ -4,7 +4,6 @@
 
 $files = scandir('.');
 $fileList = [];
-
 foreach ($files as $file) {
     $info = pathinfo('activities/' . $file);
     if (strtolower($info['extension']) == 'gpx') {
@@ -12,22 +11,16 @@ foreach ($files as $file) {
     }
 }
 
-
 $pointJS[] = [];
 foreach ($fileList as $fileName) {
-
     $gpx = simplexml_load_file($fileName);
-
     foreach($gpx->trk->trkseg->children() as $point) {
         $attributes = $point->attributes();
         $lat = (string) $attributes['lat'];
         $lon = (string) $attributes['lon'];
         $pointJS[] = "  new google.maps.LatLng($lat, $lon)";
-
     }
-
 }
-
 $pointStr = implode(",\n", $pointJS);
 ?>
 
